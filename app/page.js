@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState(-1);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToSection = (elementId) => {
     const element = document.getElementById(elementId);
@@ -50,7 +51,44 @@ export default function LandingPage() {
                 <span className="text-xl font-bold text-gray-900">🌱 CalFuel</span>
               </Link>
             </div>
-            <div className="flex items-center space-x-8">
+            
+            {/* Mobile menu button */}
+            <div className="flex md:hidden">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              >
+                <svg
+                  className={`h-6 w-6 ${isMenuOpen ? 'hidden' : 'block'}`}
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+                <svg
+                  className={`h-6 w-6 ${isMenuOpen ? 'block' : 'hidden'}`}
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Desktop menu */}
+            <div className="hidden md:flex items-center space-x-8">
               <button 
                 onClick={() => scrollToSection('pricing')}
                 className="text-gray-600 hover:text-gray-900 font-medium"
@@ -72,40 +110,69 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
+
+        {/* Mobile menu */}
+        <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden border-b border-gray-100`}>
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-white">
+            <button
+              onClick={() => {
+                scrollToSection('pricing');
+                setIsMenuOpen(false);
+              }}
+              className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+            >
+              Pricing
+            </button>
+            <button
+              onClick={() => {
+                scrollToSection('faq');
+                setIsMenuOpen(false);
+              }}
+              className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+            >
+              FAQ
+            </button>
+            <Link
+              href="/auth?signup=true"
+              className="block w-full text-center px-3 py-2 bg-[#4ade80] text-white rounded-md hover:bg-[#22c55e] transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Get Started
+            </Link>
+          </div>
+        </div>
       </nav>
 
       {/* Hero Section */}
       <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Product Image */}
-            <div className="relative">
+            {/* Product Image - Mobile First */}
+            <div className="relative order-2 lg:order-1">
               <div className="aspect-[4/3] rounded-2xl bg-gray-50 overflow-hidden">
                 <img
                   src="https://placehold.co/800x600/f3f4f6/d1d5db?text=Product+Screenshot"
                   alt="CalFuel app interface"
                   className="object-cover object-center w-full h-full"
                 />
-                {/* Add a subtle gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-gray-900/5 via-gray-900/5 to-transparent"></div>
               </div>
-              {/* Add decorative elements */}
               <div className="absolute -z-10 inset-0 bg-[#4ade80]/5 blur-3xl transform rotate-12 translate-y-12"></div>
             </div>
 
-            {/* Hero Content */}
-            <div className="text-left lg:max-w-xl">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">
+            {/* Hero Content - Mobile First */}
+            <div className="text-center lg:text-left order-1 lg:order-2">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
                 Track Your Nutrition
                 <span className="block text-[#4ade80]">With Precision</span>
               </h1>
-              <p className="mt-6 text-xl text-gray-500">
+              <p className="mt-6 text-lg sm:text-xl text-gray-500">
                 Your journey, your rules. The nutrition tracker that adapts to your lifestyle. Built by you, for you.
               </p>
-              <div className="mt-10">
+              <div className="mt-8 sm:mt-10">
                 <Link
                   href="/auth?signup=true"
-                  className="bg-[#4ade80] text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-[#22c55e] transition-colors inline-flex items-center"
+                  className="w-full sm:w-auto bg-[#4ade80] text-white px-6 sm:px-8 py-3 rounded-lg text-lg font-medium hover:bg-[#22c55e] transition-colors inline-flex items-center justify-center"
                 >
                   Start Tracking
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
@@ -118,15 +185,15 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="bg-gradient-to-b from-gray-50 to-white py-24 px-4 sm:px-6 lg:px-8">
+      {/* Features Section - Make grid responsive */}
+      <div className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Features You&apos;ll Love</h2>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto">Simple tools that make tracking your nutrition effortless.</p>
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Features You&apos;ll Love</h2>
+            <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto">Simple tools that make tracking your nutrition effortless.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {/* Feature 1 - Easy Tracking */}
             <div className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="absolute inset-0 bg-gradient-to-br from-[#4ade80]/5 to-transparent rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100"></div>
@@ -214,12 +281,12 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Pricing Section */}
-      <div id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      {/* Pricing Section - Adjust padding for mobile */}
+      <div id="pricing" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-xl text-gray-500">No hidden fees. No complicated tiers. Just one perfect plan.</p>
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+            <p className="text-lg sm:text-xl text-gray-500">No hidden fees. No complicated tiers. Just one perfect plan.</p>
           </div>
 
           <div className="max-w-lg mx-auto">
@@ -306,10 +373,10 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* FAQ Section */}
-      <div id="faq" className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* FAQ Section - Adjust padding for mobile */}
+      <div id="faq" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Frequently Asked Questions</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 sm:mb-12">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {faqItems.map((item, index) => (
               <div 
@@ -353,8 +420,8 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Footer - Adjust padding for mobile */}
+      <footer className="bg-white border-t border-gray-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-gray-500">© 2024 CalFuel. All rights reserved.</p>
         </div>
