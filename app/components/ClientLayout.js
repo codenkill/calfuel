@@ -7,10 +7,12 @@ import { AuthProvider } from "@/lib/AuthContext";
 
 export default function ClientLayout({ children }) {
   return (
-    <ErrorBoundary>
-      <Suspense fallback={<Loading />}>
-        <AuthProvider>{children}</AuthProvider>
-      </Suspense>
-    </ErrorBoundary>
+    <Suspense fallback={<Loading />}>
+      <ErrorBoundary>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </ErrorBoundary>
+    </Suspense>
   );
 } 
