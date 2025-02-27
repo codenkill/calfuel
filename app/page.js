@@ -77,26 +77,42 @@ export default function LandingPage() {
       {/* Hero Section */}
       <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <span className="text-[#4ade80] text-lg font-semibold mb-6 block">Built by you, for you.</span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">
-              Track Your Nutrition
-              <span className="block text-[#4ade80]">With Precision</span>
-            </h1>
-            <p className="mt-6 text-xl text-gray-500 max-w-2xl mx-auto">
-              Your journey, your rules. The nutrition tracker that adapts to your lifestyle, 
-              making it effortless to monitor your macros and achieve your goals.
-            </p>
-            <div className="mt-10">
-              <Link
-                href="/auth?signup=true"
-                className="bg-[#4ade80] text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-[#22c55e] transition-colors inline-flex items-center"
-              >
-                Start Tracking
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </Link>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Product Image */}
+            <div className="relative">
+              <div className="aspect-[4/3] rounded-2xl bg-gray-50 overflow-hidden">
+                <img
+                  src="https://placehold.co/800x600/f3f4f6/d1d5db?text=Product+Screenshot"
+                  alt="CalFuel app interface"
+                  className="object-cover object-center w-full h-full"
+                />
+                {/* Add a subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-gray-900/5 via-gray-900/5 to-transparent"></div>
+              </div>
+              {/* Add decorative elements */}
+              <div className="absolute -z-10 inset-0 bg-[#4ade80]/5 blur-3xl transform rotate-12 translate-y-12"></div>
+            </div>
+
+            {/* Hero Content */}
+            <div className="text-left lg:max-w-xl">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">
+                Track Your Nutrition
+                <span className="block text-[#4ade80]">With Precision</span>
+              </h1>
+              <p className="mt-6 text-xl text-gray-500">
+                Your journey, your rules. The nutrition tracker that adapts to your lifestyle. Built by you, for you.
+              </p>
+              <div className="mt-10">
+                <Link
+                  href="/auth?signup=true"
+                  className="bg-[#4ade80] text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-[#22c55e] transition-colors inline-flex items-center"
+                >
+                  Start Tracking
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
