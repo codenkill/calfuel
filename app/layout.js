@@ -1,28 +1,19 @@
-'use client';
-
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Suspense } from 'react';
-import Loading from './loading';
-import ErrorBoundary from './components/ErrorBoundary';
-import { AuthProvider } from "@/lib/AuthContext";
+import ClientLayout from './components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: "Macro Tracker",
-  description: "Track your daily macro nutrients",
+  title: "CalFuel",
+  description: "Track your daily macro nutrients with ease",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ErrorBoundary>
-          <Suspense fallback={<Loading />}>
-            <AuthProvider>{children}</AuthProvider>
-          </Suspense>
-        </ErrorBoundary>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
