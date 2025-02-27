@@ -1,16 +1,13 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+'use client';
+
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Suspense } from 'react';
+import Loading from './loading';
+import ErrorBoundary from './components/ErrorBoundary';
 import { AuthProvider } from "@/lib/AuthContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: "Macro Tracker",
@@ -20,10 +17,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <AuthProvider>{children}</AuthProvider>
+      <body className={inter.className}>
+        <ErrorBoundary>
+          <Suspense fallback={<Loading />}>
+            <AuthProvider>{children}</AuthProvider>
+          </Suspense>
+        </ErrorBoundary>
       </body>
     </html>
   );
