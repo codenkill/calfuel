@@ -13,6 +13,11 @@ const nextConfig = {
   // Optimize production builds
   reactStrictMode: true,
   poweredByHeader: false,
+  // Configure static page generation
+  experimental: {
+    // This will help with static page generation
+    appDir: true,
+  }
 }
 
 module.exports = nextConfig 
