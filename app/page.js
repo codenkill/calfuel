@@ -19,7 +19,7 @@ export default function LandingPage() {
     },
     {
       question: "Do I need a subscription to use the app?",
-      answer: "Yes, but unlike most fitness apps that charge monthly fees, we offer a one-time payment of just €19.99—forever for the first 20 customers. No hidden costs, no recurring charges—just full access for life."
+      answer: "Yes, CalFuel requires a subscription of 3,99€ per month to access all features. We believe in providing premium value at an affordable price, with no hidden costs or complicated tiers. You can cancel anytime, no questions asked."
     }
   ];
 
@@ -54,13 +54,14 @@ export default function LandingPage() {
       <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
+            <span className="text-[#4ade80] text-lg font-semibold mb-6 block">Built by you, for you.</span>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">
               Track Your Nutrition
               <span className="block text-[#4ade80]">With Precision</span>
             </h1>
             <p className="mt-6 text-xl text-gray-500 max-w-2xl mx-auto">
-              Achieve your fitness goals with our intuitive macro tracking solution. 
-              Monitor your proteins, carbs, and fats with ease.
+              Your journey, your rules. The nutrition tracker that adapts to your lifestyle, 
+              making it effortless to monitor your macros and achieve your goals.
             </p>
             <div className="mt-10">
               <Link
@@ -112,6 +113,98 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Real-time Updates</h3>
               <p className="mt-2 text-gray-500">See your progress update instantly as you log your meals throughout the day.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Pricing Section */}
+      <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+            <p className="text-xl text-gray-500">No hidden fees. No complicated tiers. Just one perfect plan.</p>
+          </div>
+
+          <div className="max-w-lg mx-auto">
+            <div className="bg-gray-900 rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
+              <div className="p-8 sm:p-10">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-2xl font-semibold text-white">Premium</h3>
+                  <span className="inline-flex px-4 py-1 text-sm font-semibold text-[#4ade80] bg-[#4ade80]/10 rounded-full">
+                    One and Only
+                  </span>
+                </div>
+
+                <div className="mt-6">
+                  <div className="flex items-baseline">
+                    <span className="text-5xl font-bold text-white">3,99€</span>
+                    <span className="ml-2 text-2xl text-gray-400">/month</span>
+                  </div>
+                  <p className="mt-2 text-gray-400">Everything you need to reach your nutritional goals</p>
+                </div>
+
+                <div className="mt-8 border-t border-gray-800 pt-8">
+                  <ul className="space-y-5">
+                    <li className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-[#4ade80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-base text-gray-300">
+                        <span className="font-semibold text-white">Unlimited meal tracking</span>
+                        <br />
+                        <span className="text-gray-400">Track all your meals with ease</span>
+                      </p>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-[#4ade80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-base text-gray-300">
+                        <span className="font-semibold text-white">Dashboard and Analytics</span>
+                        <br />
+                        <span className="text-gray-400">Deep insights into your nutrition</span>
+                      </p>
+                    </li>
+                    
+                    <li className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-[#4ade80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-base text-gray-300">
+                        <span className="font-semibold text-white">Priority support</span>
+                        <br />
+                        <span className="text-gray-400">Get help when you need it</span>
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="mt-8">
+                  <Link
+                    href="/auth?signup=true"
+                    className="block w-full bg-[#4ade80] text-center px-6 py-4 text-lg font-medium text-white rounded-xl hover:bg-[#22c55e] transition-colors duration-200"
+                  >
+                    Get Started Now
+                  </Link>
+                </div>
+
+                <div className="mt-6 text-center">
+                  <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span>30-day money-back guarantee</span>
+                  </div>
+                  <p className="mt-2 text-sm text-gray-400">Cancel anytime. No questions asked.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
