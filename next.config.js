@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  swcMinify: true,
   env: {
     NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -12,12 +11,7 @@ const nextConfig = {
   },
   // Optimize production builds
   reactStrictMode: true,
-  poweredByHeader: false,
-  // Configure static page generation
-  experimental: {
-    // This will help with static page generation
-    appDir: true,
-  }
+  poweredByHeader: false
 }
 
 module.exports = nextConfig 
