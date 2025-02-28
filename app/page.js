@@ -45,10 +45,10 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 bg-white z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
               <Link href="/" className="flex items-center">
-                <span className="text-xl font-bold text-gray-900">🌱 CalFuel</span>
+                <span className="text-2xl font-bold text-gray-900">🌱 CalFuel</span>
               </Link>
             </div>
             
@@ -56,10 +56,10 @@ export default function LandingPage() {
             <div className="flex md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                className="inline-flex items-center justify-center p-3 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
               >
                 <svg
-                  className={`h-6 w-6 ${isMenuOpen ? 'hidden' : 'block'}`}
+                  className={`h-7 w-7 ${isMenuOpen ? 'hidden' : 'block'}`}
                   stroke="currentColor"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -72,7 +72,7 @@ export default function LandingPage() {
                   />
                 </svg>
                 <svg
-                  className={`h-6 w-6 ${isMenuOpen ? 'block' : 'hidden'}`}
+                  className={`h-7 w-7 ${isMenuOpen ? 'block' : 'hidden'}`}
                   stroke="currentColor"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -91,19 +91,19 @@ export default function LandingPage() {
             <div className="hidden md:flex items-center space-x-8">
               <button 
                 onClick={() => scrollToSection('pricing')}
-                className="text-gray-600 hover:text-gray-900 font-medium"
+                className="text-gray-600 hover:text-gray-900 font-medium text-lg px-3 py-2"
               >
                 Pricing
               </button>
               <button 
                 onClick={() => scrollToSection('faq')}
-                className="text-gray-600 hover:text-gray-900 font-medium"
+                className="text-gray-600 hover:text-gray-900 font-medium text-lg px-3 py-2"
               >
                 FAQ
               </button>
               <Link 
                 href="/auth?signup=true"
-                className="bg-[#4ade80] text-white px-6 py-2 rounded-lg hover:bg-[#22c55e] transition-colors font-medium"
+                className="bg-[#4ade80] text-white px-8 py-3 rounded-xl hover:bg-[#22c55e] transition-colors font-medium text-lg"
               >
                 Get Started
               </Link>
@@ -119,7 +119,7 @@ export default function LandingPage() {
                 scrollToSection('pricing');
                 setIsMenuOpen(false);
               }}
-              className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+              className="block w-full text-left px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md text-lg"
             >
               Pricing
             </button>
@@ -128,13 +128,13 @@ export default function LandingPage() {
                 scrollToSection('faq');
                 setIsMenuOpen(false);
               }}
-              className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+              className="block w-full text-left px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md text-lg"
             >
               FAQ
             </button>
             <Link
               href="/auth?signup=true"
-              className="block w-full text-center px-3 py-2 bg-[#4ade80] text-white rounded-md hover:bg-[#22c55e] transition-colors"
+              className="block w-full text-center px-4 py-3 bg-[#4ade80] text-white rounded-xl hover:bg-[#22c55e] transition-colors text-lg"
               onClick={() => setIsMenuOpen(false)}
             >
               Get Started
@@ -144,12 +144,12 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Product Image - Mobile First */}
             <div className="relative order-2 lg:order-1">
-              <div className="aspect-[4/3] rounded-2xl bg-gray-50 overflow-hidden">
+              <div className="aspect-[4/3] rounded-2xl bg-gray-50 overflow-hidden shadow-2xl">
                 <img
                   src="https://placehold.co/800x600/f3f4f6/d1d5db?text=Product+Screenshot"
                   alt="CalFuel app interface"
@@ -162,23 +162,35 @@ export default function LandingPage() {
 
             {/* Hero Content - Mobile First */}
             <div className="text-center lg:text-left order-1 lg:order-2">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
-                Track Your Nutrition
-                <span className="block text-[#4ade80]">With Precision</span>
-              </h1>
-              <p className="mt-6 text-lg sm:text-xl text-gray-500">
-                Your journey, your rules. The nutrition tracker that adapts to your lifestyle. Built by you, for you.
+              <div className="space-y-2 mb-8">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 tracking-tight leading-tight">
+                  Track Your 
+                  <span className="block text-[#4ade80] mt-2">Nutrition Journey</span>
+                </h1>
+              </div>
+              <p className="mt-8 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto lg:mx-0">
+                Your personalized nutrition companion that adapts to your lifestyle. 
+                Build by You, for You.
               </p>
-              <div className="mt-8 sm:mt-10">
+              <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
                   href="/auth?signup=true"
-                  className="w-full sm:w-auto bg-[#4ade80] text-white px-6 sm:px-8 py-3 rounded-lg text-lg font-medium hover:bg-[#22c55e] transition-colors inline-flex items-center justify-center"
+                  className="w-full sm:w-auto bg-[#4ade80] text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-[#22c55e] transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center"
                 >
-                  Start Tracking
+                  Start Your Journey
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
                 </Link>
+                <button
+                  onClick={() => scrollToSection('features')}
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl text-lg font-medium text-gray-600 hover:text-gray-900 border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 inline-flex items-center justify-center"
+                >
+                  Learn More
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -186,7 +198,7 @@ export default function LandingPage() {
       </div>
 
       {/* Features Section - Make grid responsive */}
-      <div className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
+      <div id="features" className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Features You&apos;ll Love</h2>

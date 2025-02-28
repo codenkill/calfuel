@@ -1,19 +1,19 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
-import ClientLayout from './components/ClientLayout';
+import Providers from './components/Providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: "CalFuel",
-  description: "Track your daily macro nutrients with ease",
+  title: "CalFuel - Your Nutrition Journey",
+  description: "Track your nutrition journey with CalFuel",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientLayout>{children}</ClientLayout>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
