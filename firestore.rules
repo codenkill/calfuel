@@ -12,13 +12,73 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    // Helper function for rate limiting
+    function requestLimitNotExceeded() {
+      let recentRequests = request.time.toMillis() - get(/databases/$(database)/documents/users/$(request.auth.uid)/requests/counter).data.lastRequest;
+      return recentRequests > 500; // Minimum 500ms between requests
+    }
+
+    // Data validation helpers
+    function isValidMeal() {
+      let meal = request.resource.data;
+      return meal.name is string &&
+             meal.name.size() > 0 &&
+             meal.totalCalories is number &&
+             meal.totalCalories >= 0 &&
+             meal.totalProtein is number &&
+             meal.totalProtein >= 0 &&
+             meal.totalCarbs is number &&
+             meal.totalCarbs >= 0 &&
+             meal.totalFat is number &&
+             meal.totalFat >= 0;
+    }
+
+    function isValidFood() {
+      let food = request.resource.data;
+      return food.name is string &&
+             food.name.size() > 0 &&
+             food.serving is number &&
+             food.serving > 0 &&
+             food.calories is number &&
+             food.calories >= 0 &&
+             food.protein is number &&
+             food.protein >= 0 &&
+             food.carbs is number &&
+             food.carbs >= 0 &&
+             food.fat is number &&
+             food.fat >= 0;
+    }
+
     match /users/{userId} {
       allow create: if isUserOwner(userId);
       allow read, update: if isUserOwner(userId);
       
+      match /foods/{foodId} {
+        allow create: if isUserOwner(userId) 
+                     && requestLimitNotExceeded()
+                     && isValidFood();
+        allow read: if isUserOwner(userId);
+        allow update: if isUserOwner(userId) 
+                     && requestLimitNotExceeded()
+                     && isValidFood();
+        allow delete: if isUserOwner(userId)
+                     && requestLimitNotExceeded();
+      }
+      
       match /meals/{mealId} {
-        allow create: if isUserOwner(userId);
-        allow read, update, delete: if isUserOwner(userId);
+        allow create: if isUserOwner(userId)
+                     && requestLimitNotExceeded()
+                     && isValidMeal();
+        allow read: if isUserOwner(userId);
+        allow update: if isUserOwner(userId)
+                     && requestLimitNotExceeded()
+                     && isValidMeal();
+        allow delete: if isUserOwner(userId)
+                     && requestLimitNotExceeded();
+      }
+
+      match /requests/counter {
+        allow read, write: if isUserOwner(userId);
       }
     }
 
@@ -27,4 +87,4 @@ service cloud.firestore {
       allow read: if isAuthenticated();
     }
   }
-} 
+}
