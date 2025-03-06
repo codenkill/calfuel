@@ -313,7 +313,7 @@ export default function LandingPage() {
 
                 <div className="mt-6">
                   <div className="flex items-baseline">
-                    <span className="text-5xl font-bold text-white">3,99€</span>
+                    <span className="text-5xl font-bold text-white">4,99€</span>
                     <span className="ml-2 text-2xl text-gray-400">/month</span>
                   </div>
                   <p className="mt-2 text-gray-400">Everything you need to reach your nutritional goals</p>
