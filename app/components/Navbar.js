@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/context/AuthContext';
 import { useState } from 'react';
@@ -18,11 +19,18 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-8">
-            <Link href="/dashboard" className="flex items-center space-x-2">
-              <span className="text-xl font-semibold text-gray-900">CalFuel</span>
+            <Link href="/dashboard" className="flex items-center">
+              <Image
+                src="/logo.svg"
+                alt="CalFuel Logo"
+                width={96}
+                height={96}
+                className="w-24 h-24 -my-4"
+                priority
+              />
             </Link>
             <button 
               onClick={() => handleNavigation('/dashboard')}

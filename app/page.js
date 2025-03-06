@@ -4,6 +4,7 @@ import { useState } from "react";
 import { auth } from "../lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState(-1);
@@ -27,16 +28,16 @@ export default function LandingPage() {
 
   const faqItems = [
     {
-      question: "How is this app different from MyFitnessPal?",
-      answer: "Unlike MyFitnessPal, which focuses on calorie counting, our app is designed to give you personalized insights based on your habits. We prioritize efficiency over manual input, offering a seamless experience that helps you stay on track without tedious logging."
+      question: "How is this app different from other calorie trackers?",
+      answer: "This app keeps it simple. You can log your food, track your meals, and see your nutrition stats without unnecessary extras. It costs less than other options while giving you full control over the basics. Most apps are mobile-only, but this one is built for the web and works smoothly on mobile browsers too."
     },
     {
       question: "Is this app beginner-friendly?",
-      answer: "Absolutely! We built this app to be simple, intuitive, and frustration-free. Whether you&apos;re just starting your health journey or you&apos;re a seasoned pro, our features adapt to your level—no overwhelming dashboards or confusing settings."
+      answer: "Yes. The process is straightforward—add your foods, create meals, and check your progress in the dashboard. No complicated steps, no learning curve."
     },
     {
-      question: "Do I need a subscription to use the app?",
-      answer: "Yes, CalFuel requires a subscription of 3,99€ per month to access all features. We believe in providing premium value at an affordable price, with no hidden costs or complicated tiers. You can cancel anytime, no questions asked."
+      question: "Isn't €4.99 too cheap?",
+      answer: "No. This app does exactly what it promises, without inflated pricing. Other apps charge more to look premium, but this one is built to be affordable and effective."
     }
   ];
 
@@ -48,7 +49,14 @@ export default function LandingPage() {
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
               <Link href="/" className="flex items-center">
-                <span className="text-2xl font-bold text-gray-900">🌱 CalFuel</span>
+                <Image
+                  src="/logo.svg"
+                  alt="CalFuel Logo"
+                  width={120}
+                  height={120}
+                  className="w-32 h-32 -my-6"
+                  priority
+                />
               </Link>
             </div>
             
@@ -244,7 +252,7 @@ export default function LandingPage() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Detailed Analytics</h3>
-                <p className="text-gray-500 mb-4">Get insights into your nutrition with comprehensive analytics and reports.</p>
+                <p className="text-gray-500 mb-4">Get insights into your nutrition with a comprehensive dashboard.</p>
                 <ul className="space-y-2">
                   <li className="flex items-center text-sm text-gray-600">
                     <svg className="h-4 w-4 text-[#4ade80] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -370,14 +378,8 @@ export default function LandingPage() {
                   </Link>
                 </div>
 
-                <div className="mt-6 text-center">
-                  <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    <span>30-day money-back guarantee</span>
-                  </div>
-                  <p className="mt-2 text-sm text-gray-400">Cancel anytime. No questions asked.</p>
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-400">Cancel anytime. No questions asked.</p>
                 </div>
               </div>
             </div>
@@ -434,8 +436,19 @@ export default function LandingPage() {
 
       {/* Footer - Adjust padding for mobile */}
       <footer className="bg-white border-t border-gray-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center space-y-4">
           <p className="text-gray-500">© 2024 CalFuel. All rights reserved.</p>
+          <div className="flex items-center justify-center space-x-2">
+            <p className="text-gray-600">Made with ❤️ by</p>
+            <a 
+              href="https://x.com/fredericomatoss" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-blue-600 font-medium underline decoration-2 decoration-blue-500/30 hover:decoration-blue-500 transition-all duration-200"
+            >
+              @fredericomatoss
+            </a>
+          </div>
         </div>
       </footer>
     </div>
