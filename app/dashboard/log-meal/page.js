@@ -7,13 +7,16 @@ import Modal from '../../../app/components/Modal';
 
 export default function LogMealPage() {
   const { user } = useAuth();
-  const { foods, addNewMeal, mealHistory, updateExistingMeal, loading, error } = useData();
+  const { foods, addNewMeal, mealHistory, updateExistingMeal, deleteMealItem, loading, error } = useData();
   const [selectedFood, setSelectedFood] = useState('');
   const [amount, setAmount] = useState('');
   const [mealName, setMealName] = useState('');
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [editingMeal, setEditingMeal] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deletingMealId, setDeletingMealId] = useState(null);
+  const [mealToDelete, setMealToDelete] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleAddFood = () => {
     const foodToAdd = foods.find(food => food.id === selectedFood);
@@ -97,6 +100,55 @@ export default function LogMealPage() {
     }
   };
 
+  const handleDeleteMeal = async (date, timestamp) => {
+    setMealToDelete({ date, timestamp });
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!mealToDelete) return;
+    
+    setDeletingMealId(mealToDelete.timestamp);
+    const mealDate = mealToDelete.date || new Date(mealToDelete.timestamp).toISOString().split('T')[0];
+    
+    try {
+      const success = await deleteMealItem(mealDate, mealToDelete.timestamp);
+      if (!success) {
+        alert('Failed to delete meal. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error deleting meal:', err);
+      alert('Error deleting meal. Please try again.');
+    } finally {
+      setDeletingMealId(null);
+      setMealToDelete(null);
+      setIsDeleteModalOpen(false);
+    }
+  };
+
+  const handleAddToToday = async (meal) => {
+    const mealData = {
+      name: meal.name,
+      foods: meal.foods,
+      totalCalories: meal.totalCalories,
+      totalProtein: meal.totalProtein,
+      totalCarbs: meal.totalCarbs,
+      totalFat: meal.totalFat
+    };
+
+    const success = await addNewMeal(mealData);
+    if (success) {
+      const notification = document.createElement('div');
+      notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-500';
+      notification.textContent = 'Meal added to today\'s log';
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 500);
+      }, 2000);
+    }
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -146,11 +198,11 @@ export default function LogMealPage() {
               <p className="text-sm text-gray-500 mb-6">Add foods to your meal</p>
 
               <div className="space-y-4">
-                <div className="flex space-x-4">
+                <div className="flex flex-wrap gap-4">
                   <select
                     value={selectedFood}
                     onChange={(e) => setSelectedFood(e.target.value)}
-                    className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="flex-1 min-w-[200px] px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     <option value="">Select food</option>
                     {foods.map((food) => (
@@ -160,7 +212,7 @@ export default function LogMealPage() {
                     ))}
                   </select>
 
-                  <div className="flex space-x-2">
+                  <div className="flex gap-2">
                     <input
                       type="number"
                       placeholder="Amount"
@@ -168,7 +220,7 @@ export default function LogMealPage() {
                       onChange={(e) => setAmount(e.target.value)}
                       className="w-24 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
-                    <select className="w-20 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <select className="w-16 px-2 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                       <option>g</option>
                     </select>
                   </div>
@@ -176,7 +228,7 @@ export default function LogMealPage() {
                   <button
                     onClick={handleAddFood}
                     disabled={!selectedFood || !amount}
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                   >
                     Add
                   </button>
@@ -257,27 +309,64 @@ export default function LogMealPage() {
           {/* Meal History Section */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-lg font-medium text-gray-900 mb-1">Meal History</h2>
-            <p className="text-sm text-gray-500 mb-6">Your previously logged meals</p>
+            <p className="text-sm text-gray-500 mb-6">Your recurring meals</p>
 
             <div className="space-y-4">
               {mealHistory.map((meal, index) => (
                 <div
-                  key={index}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
+                  key={meal.timestamp}
+                  className={`border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200 ${
+                    deletingMealId === meal.timestamp ? 'opacity-50' : ''
+                  } ${meal.isToday ? 'border-green-200 bg-green-50' : ''}`}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="font-medium text-gray-900">{meal.name}</h3>
-                      <p className="text-sm text-gray-500">{formatDate(meal.timestamp)}</p>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-medium text-gray-900">{meal.name}</h3>
+                        {meal.isToday && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                            Today
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-500">Added on {formatDate(meal.addedDate || meal.timestamp)}</p>
                     </div>
-                    <button
-                      onClick={() => handleEditMeal(meal)}
-                      className="text-green-500 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full p-1"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                      </svg>
-                    </button>
+                    <div className="flex space-x-2">
+                      {!meal.isToday && (
+                        <button
+                          onClick={() => handleAddToToday(meal)}
+                          disabled={deletingMealId === meal.timestamp}
+                          className="text-green-500 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-lg px-3 py-1 text-sm font-medium disabled:opacity-50 border border-green-500"
+                          title="Use this meal today"
+                        >
+                          Use Today
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleEditMeal(meal)}
+                        disabled={deletingMealId === meal.timestamp}
+                        className="text-green-500 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full p-1 disabled:opacity-50"
+                        title="Edit meal"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => handleDeleteMeal(meal.date, meal.timestamp)}
+                        disabled={deletingMealId === meal.timestamp}
+                        className="text-red-500 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full p-1 disabled:opacity-50"
+                        title="Delete meal"
+                      >
+                        {deletingMealId === meal.timestamp ? (
+                          <div className="h-5 w-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
                   <div className="grid grid-cols-4 gap-2 text-sm">
                     <div>
@@ -325,11 +414,11 @@ export default function LogMealPage() {
 
             {/* Food Selection Form */}
             <div className="space-y-4">
-              <div className="flex space-x-4">
+              <div className="flex flex-wrap gap-4">
                 <select
                   value={selectedFood}
                   onChange={(e) => setSelectedFood(e.target.value)}
-                  className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="flex-1 min-w-[200px] px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 >
                   <option value="">Select food</option>
                   {foods.map((food) => (
@@ -339,7 +428,7 @@ export default function LogMealPage() {
                   ))}
                 </select>
 
-                <div className="flex space-x-2">
+                <div className="flex gap-2">
                   <input
                     type="number"
                     placeholder="Amount"
@@ -347,7 +436,7 @@ export default function LogMealPage() {
                     onChange={(e) => setAmount(e.target.value)}
                     className="w-24 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
-                  <select className="w-20 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                  <select className="w-16 px-2 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <option>g</option>
                   </select>
                 </div>
@@ -355,7 +444,7 @@ export default function LogMealPage() {
                 <button
                   onClick={handleAddFood}
                   disabled={!selectedFood || !amount}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                 >
                   Add
                 </button>
@@ -437,6 +526,40 @@ export default function LogMealPage() {
                   Update Meal
                 </button>
               </div>
+            </div>
+          </div>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => {
+            setIsDeleteModalOpen(false);
+            setMealToDelete(null);
+          }}
+          title="Delete Meal"
+        >
+          <div className="space-y-6">
+            <p className="text-sm text-gray-500">
+              Are you sure you want to delete this meal? This action cannot be undone.
+            </p>
+
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setMealToDelete(null);
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </Modal>
