@@ -7,7 +7,7 @@ import Modal from '../../../app/components/Modal';
 
 export default function LogMealPage() {
   const { user } = useAuth();
-  const { foods, addNewMeal, mealHistory, updateExistingMeal, deleteMealItem, loading, error } = useData();
+  const { foods, addNewMeal, mealHistory, updateExistingMeal, deleteMealItem, removeMealFromToday, loading, error } = useData();
   const [selectedFood, setSelectedFood] = useState('');
   const [amount, setAmount] = useState('');
   const [mealName, setMealName] = useState('');
@@ -141,6 +141,20 @@ export default function LogMealPage() {
       const notification = document.createElement('div');
       notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-500';
       notification.textContent = 'Meal added to today\'s log';
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 500);
+      }, 2000);
+    }
+  };
+
+  const handleRemoveFromToday = async (meal) => {
+    const success = await removeMealFromToday(meal.timestamp);
+    if (success) {
+      const notification = document.createElement('div');
+      notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-500';
+      notification.textContent = 'Meal removed from today\'s dashboard';
       document.body.appendChild(notification);
       setTimeout(() => {
         notification.style.opacity = '0';
@@ -307,11 +321,11 @@ export default function LogMealPage() {
           </div>
 
           {/* Meal History Section */}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6 flex flex-col">
             <h2 className="text-lg font-medium text-gray-900 mb-1">Meal History</h2>
             <p className="text-sm text-gray-500 mb-6">Your recurring meals</p>
 
-            <div className="space-y-4">
+            <div className="space-y-4 overflow-y-auto flex-1 pr-2" style={{ maxHeight: '32rem' }}>
               {mealHistory.map((meal, index) => (
                 <div
                   key={meal.timestamp}
@@ -332,7 +346,16 @@ export default function LogMealPage() {
                       <p className="text-sm text-gray-500">Added on {formatDate(meal.addedDate || meal.timestamp)}</p>
                     </div>
                     <div className="flex space-x-2">
-                      {!meal.isToday && (
+                      {meal.isToday ? (
+                        <button
+                          onClick={() => handleRemoveFromToday(meal)}
+                          disabled={deletingMealId === meal.timestamp}
+                          className="text-gray-500 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-lg px-3 py-1 text-sm font-medium disabled:opacity-50 border border-gray-300"
+                          title="Remove from today's dashboard"
+                        >
+                          Remove Today
+                        </button>
+                      ) : (
                         <button
                           onClick={() => handleAddToToday(meal)}
                           disabled={deletingMealId === meal.timestamp}
