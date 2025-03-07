@@ -33,7 +33,7 @@ export default function LandingPage() {
     },
     {
       question: "Is this app beginner-friendly?",
-      answer: "Yes. The process is straightforward—add your foods, create meals, and check your progress in the dashboard. No complicated steps, no learning curve."
+      answer: "Yes. The process is straightforward - add your foods, create meals, and check your progress in the dashboard. No complicated steps, no learning curve."
     },
     {
       question: "Isn't €4.99 too cheap?",
@@ -437,7 +437,7 @@ export default function LandingPage() {
       {/* Footer - Adjust padding for mobile */}
       <footer className="bg-white border-t border-gray-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center space-y-4">
-          <p className="text-gray-500">© 2024 CalFuel. All rights reserved.</p>
+          <p className="text-gray-500">© 2025 CalFuel. All rights reserved.</p>
           <div className="flex items-center justify-center space-x-2">
             <p className="text-gray-600">Made with ❤️ by</p>
             <a 

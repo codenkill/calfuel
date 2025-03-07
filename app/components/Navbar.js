@@ -32,41 +32,38 @@ export default function Navbar() {
                 priority
               />
             </Link>
-            <button 
+            <button
               onClick={() => handleNavigation('/dashboard')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                pathname === '/dashboard' 
-                  ? 'bg-[#4ade80] text-white' 
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-4 py-2 rounded-lg transition-all duration-200 ${pathname === '/dashboard'
+                ? 'bg-[#4ade80] text-white'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
               disabled={isNavigating}
             >
               Dashboard
             </button>
-            <button 
+            <button
               onClick={() => handleNavigation('/dashboard/foods')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                pathname === '/dashboard/foods' 
-                  ? 'bg-[#4ade80] text-white' 
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-4 py-2 rounded-lg transition-all duration-200 ${pathname === '/dashboard/foods'
+                ? 'bg-[#4ade80] text-white'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
               disabled={isNavigating}
             >
               Foods
             </button>
-            <button 
+            <button
               onClick={() => handleNavigation('/dashboard/log-meal')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                pathname === '/dashboard/log-meal' 
-                  ? 'bg-[#4ade80] text-white' 
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-4 py-2 rounded-lg transition-all duration-200 ${pathname === '/dashboard/log-meal'
+                ? 'bg-[#4ade80] text-white'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
               disabled={isNavigating}
             >
               Log Meal
             </button>
           </div>
-          <button 
+          <button
             onClick={signOut}
             className="text-gray-600 hover:text-gray-900"
             disabled={isNavigating}
