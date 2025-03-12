@@ -49,32 +49,16 @@ service cloud.firestore {
              food.fat >= 0;
     }
 
+    // Allow users to read and write their own data
     match /users/{userId} {
-      allow create: if isUserOwner(userId);
-      allow read, update: if isUserOwner(userId);
+      allow read, write: if isAuthenticated();
       
       match /foods/{foodId} {
-        allow create: if isUserOwner(userId) 
-                     && requestLimitNotExceeded()
-                     && isValidFood();
-        allow read: if isUserOwner(userId);
-        allow update: if isUserOwner(userId) 
-                     && requestLimitNotExceeded()
-                     && isValidFood();
-        allow delete: if isUserOwner(userId)
-                     && requestLimitNotExceeded();
+        allow read, write: if isUserOwner(userId);
       }
       
       match /meals/{mealId} {
-        allow create: if isUserOwner(userId)
-                     && requestLimitNotExceeded()
-                     && isValidMeal();
-        allow read: if isUserOwner(userId);
-        allow update: if isUserOwner(userId)
-                     && requestLimitNotExceeded()
-                     && isValidMeal();
-        allow delete: if isUserOwner(userId)
-                     && requestLimitNotExceeded();
+        allow read, write: if isUserOwner(userId);
       }
 
       match /requests/counter {
@@ -82,9 +66,15 @@ service cloud.firestore {
       }
     }
 
-    // Allow read access to connection test document
-    match /_connection_test_/{document=**} {
+    // Allow all authenticated users to read the foods collection
+    match /foods/{foodId} {
       allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Allow read access to connection test document
+    match /_connection_test/{document=**} {
+      allow read, write: if true;
     }
   }
 }

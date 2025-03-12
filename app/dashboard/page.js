@@ -6,27 +6,14 @@ import { useState } from 'react';
 import Modal from '../../app/components/Modal';
 
 // Loading skeleton component
-function DashboardSkeleton() {
+function LoadingSkeleton() {
   return (
-    <div className="space-y-8">
-      <div className="bg-white rounded-lg shadow p-6 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/4 mb-6"></div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="space-y-3">
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              <div className="h-2 bg-gray-200 rounded w-full"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="bg-white rounded-lg shadow p-6 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/4 mb-6"></div>
-        <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-200 rounded"></div>
-          ))}
-        </div>
+    <div className="animate-pulse">
+      <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+      <div className="space-y-3">
+        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div className="h-4 bg-gray-200 rounded w-5/6"></div>
       </div>
     </div>
   );
@@ -56,61 +43,57 @@ function DailyProgress({ progress, onEditTarget }) {
           Edit Targets
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div>
-          <p className="text-sm font-medium text-gray-500">Calories</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">
-            {progress.calories.current} / {progress.calories.target}
-          </p>
-          <div className="mt-1 h-2 bg-gray-200 rounded-full">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h3 className="text-sm font-medium text-gray-500">Calories</h3>
+          <div className="mt-1">
+            <span className="text-2xl font-semibold">{progress.calories.current}</span>
+            <span className="text-gray-500"> / {progress.calories.target}</span>
+          </div>
+          <div className="mt-2 h-2 bg-gray-200 rounded-full">
             <div
-              className="h-full bg-green-500 rounded-full"
-              style={{
-                width: `${Math.min(100, (progress.calories.current / progress.calories.target) * 100)}%`
-              }}
-            />
+              className="h-2 bg-green-500 rounded-full"
+              style={{ width: `${Math.min(100, (progress.calories.current / progress.calories.target) * 100)}%` }}
+            ></div>
           </div>
         </div>
-        <div>
-          <p className="text-sm font-medium text-gray-500">Protein</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">
-            {progress.protein.current}g / {progress.protein.target}g
-          </p>
-          <div className="mt-1 h-2 bg-gray-200 rounded-full">
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h3 className="text-sm font-medium text-gray-500">Protein</h3>
+          <div className="mt-1">
+            <span className="text-2xl font-semibold">{progress.protein.current}g</span>
+            <span className="text-gray-500"> / {progress.protein.target}g</span>
+          </div>
+          <div className="mt-2 h-2 bg-gray-200 rounded-full">
             <div
-              className="h-full bg-green-500 rounded-full"
-              style={{
-                width: `${Math.min(100, (progress.protein.current / progress.protein.target) * 100)}%`
-              }}
-            />
+              className="h-2 bg-green-500 rounded-full"
+              style={{ width: `${Math.min(100, (progress.protein.current / progress.protein.target) * 100)}%` }}
+            ></div>
           </div>
         </div>
-        <div>
-          <p className="text-sm font-medium text-gray-500">Carbs</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">
-            {progress.carbs.current}g / {progress.carbs.target}g
-          </p>
-          <div className="mt-1 h-2 bg-gray-200 rounded-full">
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h3 className="text-sm font-medium text-gray-500">Carbs</h3>
+          <div className="mt-1">
+            <span className="text-2xl font-semibold">{progress.carbs.current}g</span>
+            <span className="text-gray-500"> / {progress.carbs.target}g</span>
+          </div>
+          <div className="mt-2 h-2 bg-gray-200 rounded-full">
             <div
-              className="h-full bg-green-500 rounded-full"
-              style={{
-                width: `${Math.min(100, (progress.carbs.current / progress.carbs.target) * 100)}%`
-              }}
-            />
+              className="h-2 bg-green-500 rounded-full"
+              style={{ width: `${Math.min(100, (progress.carbs.current / progress.carbs.target) * 100)}%` }}
+            ></div>
           </div>
         </div>
-        <div>
-          <p className="text-sm font-medium text-gray-500">Fat</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">
-            {progress.fat.current}g / {progress.fat.target}g
-          </p>
-          <div className="mt-1 h-2 bg-gray-200 rounded-full">
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h3 className="text-sm font-medium text-gray-500">Fat</h3>
+          <div className="mt-1">
+            <span className="text-2xl font-semibold">{progress.fat.current}g</span>
+            <span className="text-gray-500"> / {progress.fat.target}g</span>
+          </div>
+          <div className="mt-2 h-2 bg-gray-200 rounded-full">
             <div
-              className="h-full bg-green-500 rounded-full"
-              style={{
-                width: `${Math.min(100, (progress.fat.current / progress.fat.target) * 100)}%`
-              }}
-            />
+              className="h-2 bg-green-500 rounded-full"
+              style={{ width: `${Math.min(100, (progress.fat.current / progress.fat.target) * 100)}%` }}
+            ></div>
           </div>
         </div>
       </div>
@@ -224,7 +207,7 @@ export default function DashboardPage() {
         )}
 
         {loading ? (
-          <DashboardSkeleton />
+          <LoadingSkeleton />
         ) : (
           <>
             <DailyProgress
