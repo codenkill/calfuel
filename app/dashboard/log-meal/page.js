@@ -100,19 +100,19 @@ export default function LogMealPage() {
     }
   };
 
-  const handleDeleteMeal = async (date, timestamp) => {
-    setMealToDelete({ date, timestamp });
+  const handleDeleteMeal = async (date, mealId) => {
+    setMealToDelete({ date, mealId });
     setIsDeleteModalOpen(true);
   };
 
   const confirmDelete = async () => {
     if (!mealToDelete) return;
     
-    setDeletingMealId(mealToDelete.timestamp);
-    const mealDate = mealToDelete.date || new Date(mealToDelete.timestamp).toISOString().split('T')[0];
+    setDeletingMealId(mealToDelete.mealId);
+    const mealDate = mealToDelete.date || new Date().toISOString().split('T')[0];
     
     try {
-      const success = await deleteMealItem(mealDate, mealToDelete.timestamp);
+      const success = await deleteMealItem(mealDate, mealToDelete.mealId);
       if (!success) {
         alert('Failed to delete meal. Please try again.');
       }
@@ -150,7 +150,7 @@ export default function LogMealPage() {
   };
 
   const handleRemoveFromToday = async (meal) => {
-    const success = await removeMealFromToday(meal.timestamp);
+    const success = await removeMealFromToday(meal.id);
     if (success) {
       const notification = document.createElement('div');
       notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-500';
@@ -326,11 +326,11 @@ export default function LogMealPage() {
             <p className="text-sm text-gray-500 mb-6">Your recurring meals</p>
 
             <div className="space-y-4 overflow-y-auto flex-1 pr-2" style={{ maxHeight: '32rem' }}>
-              {mealHistory.map((meal, index) => (
+              {mealHistory.map((meal) => (
                 <div
-                  key={meal.timestamp}
+                  key={meal.id}
                   className={`border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200 ${
-                    deletingMealId === meal.timestamp ? 'opacity-50' : ''
+                    deletingMealId === meal.id ? 'opacity-50' : ''
                   } ${meal.isToday ? 'border-green-200 bg-green-50' : ''}`}
                 >
                   <div className="flex justify-between items-start mb-2">
@@ -349,7 +349,7 @@ export default function LogMealPage() {
                       {meal.isToday ? (
                         <button
                           onClick={() => handleRemoveFromToday(meal)}
-                          disabled={deletingMealId === meal.timestamp}
+                          disabled={deletingMealId === meal.id}
                           className="text-gray-500 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-lg px-3 py-1 text-sm font-medium disabled:opacity-50 border border-gray-300"
                           title="Remove from today's dashboard"
                         >
@@ -358,7 +358,7 @@ export default function LogMealPage() {
                       ) : (
                         <button
                           onClick={() => handleAddToToday(meal)}
-                          disabled={deletingMealId === meal.timestamp}
+                          disabled={deletingMealId === meal.id}
                           className="text-green-500 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-lg px-3 py-1 text-sm font-medium disabled:opacity-50 border border-green-500"
                           title="Use this meal today"
                         >
@@ -367,7 +367,7 @@ export default function LogMealPage() {
                       )}
                       <button
                         onClick={() => handleEditMeal(meal)}
-                        disabled={deletingMealId === meal.timestamp}
+                        disabled={deletingMealId === meal.id}
                         className="text-green-500 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full p-1 disabled:opacity-50"
                         title="Edit meal"
                       >
@@ -376,12 +376,12 @@ export default function LogMealPage() {
                         </svg>
                       </button>
                       <button
-                        onClick={() => handleDeleteMeal(meal.date, meal.timestamp)}
-                        disabled={deletingMealId === meal.timestamp}
+                        onClick={() => handleDeleteMeal(meal.date, meal.id)}
+                        disabled={deletingMealId === meal.id}
                         className="text-red-500 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full p-1 disabled:opacity-50"
                         title="Delete meal"
                       >
-                        {deletingMealId === meal.timestamp ? (
+                        {deletingMealId === meal.id ? (
                           <div className="h-5 w-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
                         ) : (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

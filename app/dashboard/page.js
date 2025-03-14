@@ -4,6 +4,8 @@ import { useAuth } from '../../lib/context/AuthContext';
 import { useData } from '../../lib/context/DataContext';
 import { useState } from 'react';
 import Modal from '../../app/components/Modal';
+import ButtonPortal from '../../app/components/ButtonPortal';
+import SubscribeButton from '../../app/components/SubscribeButton';
 
 // Loading skeleton component
 function LoadingSkeleton() {
@@ -146,8 +148,12 @@ function TodaysMeals({ meals }) {
 }
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user, subscriptionStatus } = useAuth();
   const { userData, todaysMeals, loading, error, isOffline, updateTargets } = useData();
+  
+  console.log('Dashboard - Current subscription status:', subscriptionStatus);
+  console.log('Dashboard - User data:', userData);
+  
   const [isEditingTargets, setIsEditingTargets] = useState(false);
   const [newTargets, setNewTargets] = useState({
     calories: 2000,
@@ -202,6 +208,10 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+        </div>
+
         {(error || isOffline) && (
           <ErrorBanner message={error} isOffline={isOffline} />
         )}

@@ -3,9 +3,6 @@
 import { useEffect } from 'react';
 import { useAuth } from '../../lib/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 export default function SubscribePage() {
   const { user, subscriptionStatus, loading } = useAuth();
@@ -23,8 +20,6 @@ export default function SubscribePage() {
 
   const handleSubscribe = async () => {
     try {
-      const stripe = await stripePromise;
-      
       // Create a checkout session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -37,18 +32,33 @@ export default function SubscribePage() {
         }),
       });
 
-      const { sessionId } = await response.json();
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.error('Server returned non-JSON response:', await response.text());
+        return;
+      }
 
-      // Redirect to checkout
-      const result = await stripe.redirectToCheckout({
-        sessionId,
-      });
+      const data = await response.json();
+      console.log('Server response:', data);
 
-      if (result.error) {
-        console.error(result.error);
+      if (!response.ok) {
+        console.error('Server error:', data.error);
+        return;
+      }
+
+      if (data.error) {
+        console.error('Error creating checkout session:', data.error);
+        return;
+      }
+
+      // Redirect to the checkout URL
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('No URL received from server:', data);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error in handleSubscribe:', error);
     }
   };
 

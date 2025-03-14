@@ -4,25 +4,56 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../../lib/context/AuthContext';
-import { useState } from 'react';
+import { useState, useCallback, useMemo, memo } from 'react';
+import ButtonPortal from './ButtonPortal';
 
-export default function Navbar() {
+const NavButton = memo(({ href, label, isActive, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+      isActive
+        ? 'bg-[#4ade80] text-white'
+        : 'text-gray-600 hover:text-gray-900'
+    }`}
+  >
+    {label}
+  </button>
+));
+
+NavButton.displayName = 'NavButton';
+
+const Navbar = () => {
+  const { signOut } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const { signOut } = useAuth();
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const handleNavigation = (path) => {
+  const handleNavigation = useCallback(async (path) => {
+    if (pathname === path || isNavigating) return;
     setIsNavigating(true);
-    router.push(path);
-  };
+    await router.push(path);
+    setIsNavigating(false);
+  }, [pathname, router, isNavigating]);
+
+  const handleSignOut = useCallback(async () => {
+    if (isNavigating) return;
+    setIsNavigating(true);
+    await signOut();
+    setIsNavigating(false);
+  }, [signOut, isNavigating]);
+
+  const navItems = useMemo(() => [
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/dashboard/foods', label: 'Foods' },
+    { href: '/dashboard/log-meal', label: 'Log Meal' }
+  ], []);
 
   return (
     <nav className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-8">
-            <Link href="/dashboard" className="flex items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link href="/dashboard" className="flex items-center mr-8">
               <Image
                 src="/logo.svg"
                 alt="CalFuel Logo"
@@ -32,44 +63,28 @@ export default function Navbar() {
                 priority
               />
             </Link>
+            <div className="flex space-x-8">
+              {navItems.map((item) => (
+                <NavButton
+                  key={item.href}
+                  href={item.href}
+                  label={item.label}
+                  isActive={pathname === item.href}
+                  onClick={() => handleNavigation(item.href)}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <ButtonPortal />
             <button
-              onClick={() => handleNavigation('/dashboard')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${pathname === '/dashboard'
-                ? 'bg-[#4ade80] text-white'
-                : 'text-gray-600 hover:text-gray-900'
-                }`}
+              onClick={handleSignOut}
               disabled={isNavigating}
+              className="text-gray-600 hover:text-gray-900"
             >
-              Dashboard
-            </button>
-            <button
-              onClick={() => handleNavigation('/dashboard/foods')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${pathname === '/dashboard/foods'
-                ? 'bg-[#4ade80] text-white'
-                : 'text-gray-600 hover:text-gray-900'
-                }`}
-              disabled={isNavigating}
-            >
-              Foods
-            </button>
-            <button
-              onClick={() => handleNavigation('/dashboard/log-meal')}
-              className={`px-4 py-2 rounded-lg transition-all duration-200 ${pathname === '/dashboard/log-meal'
-                ? 'bg-[#4ade80] text-white'
-                : 'text-gray-600 hover:text-gray-900'
-                }`}
-              disabled={isNavigating}
-            >
-              Log Meal
+              Sign out
             </button>
           </div>
-          <button
-            onClick={signOut}
-            className="text-gray-600 hover:text-gray-900"
-            disabled={isNavigating}
-          >
-            Sign out
-          </button>
         </div>
       </div>
       {isNavigating && (
@@ -77,4 +92,6 @@ export default function Navbar() {
       )}
     </nav>
   );
-} 
+};
+
+export default memo(Navbar); 
